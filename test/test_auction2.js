@@ -125,7 +125,11 @@ contract('Auction2', async(accounts) => {
   it('raises a bid if not highest', async() => {
     const snapId = await takeSnapshot();
     await auction.place_bid({from: bidder1, value: toWei('0.2', 'ether')});
+    const maxBidder1 = await auction.max_bidder.call();
+    assert.equal(bidder1, maxBidder1);
     await auction.place_bid({from: bidder2, value: toWei('0.3', 'ether')});
+    const maxBidder = await auction.max_bidder.call();
+    assert.equal(bidder2, maxBidder);
     await catchRevert(
         auction.raise({from: bidder1, value: toWei('0.4', 'ether')}));
     await revertToSnapshot(snapId);
@@ -140,10 +144,15 @@ contract('Auction2', async(accounts) => {
 
   it('gets winner after expiryDuration', async() => {
     const snapId = await takeSnapshot();
-    await auction.place_bid({from: bidder1, value: toWei('0.2', 'ether')});
+    const bid = toWei('0.2', 'ether');
+    await auction.place_bid({from: bidder1, value: bid});
     await increaseTime(expiryDuration);
     const winner = await auction.get_winner({from: owner});
     assert.equal(winner, bidder1);
+    const maxBidder = await auction.max_bidder.call();
+    assert.equal(bidder1, maxBidder);
+    const maxBidValue = await auction.max_bid_value.call();
+    assert.equal(bid, maxBidValue);
     await revertToSnapshot(snapId);
   });
 
@@ -167,18 +176,41 @@ contract('Auction2', async(accounts) => {
   it('auction', async() => {
     const snapId = await takeSnapshot();
     let maxBidder;
-    await auction.place_bid({from: bidder1, value: toWei('0.2', 'ether')});
-    maxBidder = await auction.maxBidder();
+    let maxBidValue;
+    let bid;
+    let raise;
+
+    bid = toWei('0.2', 'ether');
+    await auction.place_bid({from: bidder1, value: bid});
+    maxBidder = await auction.max_bidder.call();
     assert.equal(bidder1, maxBidder);
-    await auction.raise({from: bidder1, value: toWei('0.3', 'ether')});
-    maxBidder = await auction.maxBidder();
+    maxBidValue = await auction.max_bid_value.call();
+    assert.equal(bid, maxBidValue);
+
+    raise = toWei('0.3', 'ether');
+    await auction.raise({from: bidder1, value: raise});
+    maxBidder = await auction.max_bidder.call();
     assert.equal(bidder1, maxBidder);
-    await auction.place_bid({from: bidder2, value: toWei('0.4', 'ether')});
-    maxBidder = await auction.maxBidder();
+    maxBidValue = await auction.max_bid_value.call();
+    assert.equal(bid + raise, maxBidValue);
+
+    bid = toWei('0.7', 'ether');
+    await auction.place_bid({from: bidder2, value: bid});
+    maxBidder = await auction.max_bidder.call();
     assert.equal(bidder2, maxBidder);
+    maxBidValue = await auction.max_bid_value.call();
+    assert.equal(bid, maxBidValue);
+
+    await auction.withdraw({from: bidder1});
+
     await increaseTime(expiryDuration);
     const winner = await auction.get_winner({from: owner});
     assert.equal(bidder2, winner);
+    maxBidder = await auction.max_bidder.call();
+    assert.equal(bidder2, maxBidder);
+    maxBidValue = await auction.max_bid_value.call();
+    assert.equal(bid, maxBidValue);
+
     await revertToSnapshot(snapId);
   });
 });
