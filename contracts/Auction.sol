@@ -19,11 +19,11 @@ contract Auction {
 
     function place_bid() public payable {
         // Check if input is larger than max_bid_value
-        require(msg.value > max_bid_value);
+        require((bids[msg.sender] + msg.value) > max_bid_value);
         // Check that the auction is still open
         require(now < endtime);
 
-        bids[msg.sender] = msg.value;
+        bids[msg.sender] += msg.value;
         max_bidder = msg.sender;
         max_bid_value = msg.value;
 
@@ -36,6 +36,7 @@ contract Auction {
     function withdraw() public {
         require(msg.sender != max_bidder);
         require(msg.sender != owner);
+        require(now >= endtime);
         uint amount = bids[msg.sender];
         //check balance
         require(address(this).balance >= max_bid_value + amount);
@@ -51,16 +52,9 @@ contract Auction {
         owner.transfer(amount);
     }
 
-    function raise() public payable {
-        require(msg.sender == max_bidder);
-        bids[msg.sender] += msg.value;
-        max_bid_value = bids[msg.sender];
-    }
-
     function get_winner() public view returns (address) {
-        if(now >= endtime) {
-            return max_bidder;
-        }
+        require(now >= endtime);
+        return max_bidder;
     }
 
 }
