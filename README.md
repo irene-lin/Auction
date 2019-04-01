@@ -50,7 +50,7 @@ Transactions can be seen in [Etherscan](Etherscan.io).
 ## Usage
 
 ### Creating contract
-![Creating contract](Auction/Creating contract.png)
+![Creating contract](/Creating_contract.png)
 
 ## Contributing
 This contract was created by the [CMU Blockchain Group](http://blockchain.cs.cmu.edu/)
