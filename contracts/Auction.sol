@@ -23,6 +23,7 @@ contract Auction {
         require((bids[msg.sender] + msg.value) > max_bid_value);
         // Check that the auction is still open
         require(now < endtime);
+        require(msg.sender != owner);
 
         bids[msg.sender] += msg.value;
         max_bidder = msg.sender;
