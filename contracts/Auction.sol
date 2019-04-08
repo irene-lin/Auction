@@ -9,6 +9,7 @@ contract Auction {
     mapping (address => uint) public bids; //maps bidders to bid values
 
     constructor(uint duration_minutes, uint starting_bid) public {
+        require(duration_minutes <= 60);
         //set auction end time
         endtime = now + duration_minutes * 60 seconds;
         //set contract and auction owner
