@@ -55,15 +55,15 @@ Choosing the environment 'Injected Web3' allows deploying the contract onto the 
 
 ### Creating contract
 First, we have to create a contract. Here we specify the duration in minutes and the starting_bid value.
-![Creating contract](Creating_contract.PNG)
+![Creating contract](./images/Creating_contract.PNG)
 
 ### Place bid
 Everyone is able to place a bid in this contract. When a user places a new highest bid, he becomes the max_bidder, the max_bid_value is his bid and everyone can see his bid.
-![Place bid](./images/place_bid.PNG)
+![Place bid](./images/place_bid.PNG =200x451)
 
 ### Endtime
 The endtime is given in unix timestamp format:
-![Endtime](endtime.PNG)
+![Endtime](./images/endtime.PNG)
 
 
 ## Contributing
