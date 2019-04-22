@@ -59,7 +59,7 @@ First, we have to create a contract. Here we specify the duration in minutes and
 
 ### Place bid
 Everyone is able to place a bid in this contract. When a user places a new highest bid, he becomes the max_bidder, the max_bid_value is his bid and everyone can see his bid.
-![Place bid](place_bid.PNG)
+![Place bid](./images/place_bid.PNG)
 
 ### Endtime
 The endtime is given in unix timestamp format:
