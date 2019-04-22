@@ -49,11 +49,22 @@ Transactions can be seen in [Etherscan](Etherscan.io).
 
 ## Usage
 
+### Deploying
+The open tool [Remix](https://remix.ethereum.org) can be used to demonstrate the contract. Using the environment 'Javascript VM', everything will be local and the contract is not deployed onto the real Ethereum (testnet) Blockchain.
+Choosing the environment 'Injected Web3' allows deploying the contract onto the Ethereum testnet Rinkeby. This requires that an account is set up with testnet Ethereum as explained in Installation. Other users can than interact with the contract using Metamask.
+
 ### Creating contract
+First, we have to create a contract. Here we specify the duration in minutes and the starting_bid value.
 ![Creating contract](Creating_contract.PNG)
+
+### Place bid
+Everyone is able to place a bid in this contract. When a user places a new highest bid, he becomes the max_bidder, the max_bid_value is his bid and everyone can see his bid.
+![Place bid](place_bid.PNG)
+
+### Endtime
+The endtime is given in unix timestamp format:
+![Endtime](endtime.PNG)
+
 
 ## Contributing
 This contract was created by the [CMU Blockchain Group](http://blockchain.cs.cmu.edu/)
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
